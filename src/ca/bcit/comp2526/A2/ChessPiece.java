@@ -3,13 +3,6 @@ import javafx.scene.text.Text;
 
 /**
  * ChessPiece.
- *  "\u2654 " + // white king
- *  "\u2655 " + // white queen
- *  "\u2656 " + // white rook
- *  "\u2657 " + // white bishop
- *  "\u2658 " + // white knight
- *  "\u2659 " + // white pawn
- *  "\n" +
  *  "\u265A " + // black king
  *  "\u265B " + // black queen
  *  "\u265C " + // black rook
@@ -50,7 +43,7 @@ abstract class ChessPiece extends Text {
 
     /**
      * Sets the colour for this ChessPiece.
-     * @return colour a String
+     * @param colour a String
      */
     public void setColour(String colour) {
         this.colour = colour;

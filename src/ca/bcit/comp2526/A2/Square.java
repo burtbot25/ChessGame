@@ -57,8 +57,6 @@ public class Square extends Rectangle {
             setFill(Color.LIGHTGREY);
         }
         
-     
-        //this.setOnMouseClicked(this::selected);
     }
     
     /**

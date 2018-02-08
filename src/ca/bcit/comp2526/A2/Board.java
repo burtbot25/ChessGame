@@ -24,6 +24,18 @@ public class Board extends GridPane {
             new Square[ChessGame.WIDTH][ChessGame.HEIGHT];
     
     /**
+     * Holds all the black pawns in an array.
+     */
+    private ChessPiece[] bPawnArray = 
+            new Pawn[ChessGame.WIDTH];
+    
+    /**
+     * Holds all the white pawns in an array.
+     */
+    private ChessPiece[] wPawnArray = 
+            new Pawn[ChessGame.WIDTH];
+    
+    /**
      * Color of square.
      */
     private String colour;
@@ -79,6 +91,8 @@ public class Board extends GridPane {
             setRowIndex(source, sqRow);
             active = !(active);
         }
+        
+        
     }
     
     
@@ -90,6 +104,8 @@ public class Board extends GridPane {
         
         System.out.println(objCol + " " + objRow);
         System.out.println(source);
+        
+
     }
     
     /**
@@ -118,12 +134,66 @@ public class Board extends GridPane {
      * Creates the pieces on the board.
      */
     public void makePieces() {
-        ChessPiece bKing = new King("black");
+        // White Pieces
         ChessPiece wKing = new King("white");
-        add(bKing, 4, 0);
         add(wKing, 4, 7);
-        
-        bKing.setOnMouseClicked(this::togglePiece);
         wKing.setOnMouseClicked(this::togglePiece);
+        ChessPiece wQueen = new Queen("white");
+        add(wQueen, 3, 7);
+        wQueen.setOnMouseClicked(this::togglePiece);
+        ChessPiece wBishop1 = new Bishop("white");
+        add(wBishop1, 2, 7);
+        wBishop1.setOnMouseClicked(this::togglePiece);
+        ChessPiece wBishop2 = new Bishop("white");
+        add(wBishop2, 5, 7);
+        wBishop2.setOnMouseClicked(this::togglePiece);
+        ChessPiece wKnight1 = new Knight("white");
+        add(wKnight1, 1, 7);
+        wKnight1.setOnMouseClicked(this::togglePiece);
+        ChessPiece wKnight2 = new Knight("white");
+        add(wKnight2, 6, 7);
+        wKnight2.setOnMouseClicked(this::togglePiece);
+        ChessPiece wRook1 = new Rook("white");
+        add(wRook1, 0, 7);
+        wRook1.setOnMouseClicked(this::togglePiece);
+        ChessPiece wRook2 = new Rook("white");
+        add(wRook2, 7, 7);
+        wRook2.setOnMouseClicked(this::togglePiece);
+        for (int i = 0; i < ChessGame.WIDTH; i++) {
+            wPawnArray[i] = new Pawn("white");
+            add(wPawnArray[i], i, 6);
+            wPawnArray[i].setOnMouseClicked(this::togglePiece);
+        }
+        
+        // Black Pieces
+        ChessPiece bKing = new King("black");
+        add(bKing, 4, 0);
+        bKing.setOnMouseClicked(this::togglePiece);
+        ChessPiece bQueen = new Queen("black");
+        add(bQueen, 3, 0);
+        bQueen.setOnMouseClicked(this::togglePiece);
+        ChessPiece bBishop1 = new Bishop("black");
+        add(bBishop1, 2, 0);
+        bBishop1.setOnMouseClicked(this::togglePiece);
+        ChessPiece bBishop2 = new Bishop("black");
+        add(bBishop2, 5, 0);
+        bBishop2.setOnMouseClicked(this::togglePiece);
+        ChessPiece bKnight1 = new Knight("black");
+        add(bKnight1, 1, 0);
+        bKnight1.setOnMouseClicked(this::togglePiece);
+        ChessPiece bKnight2 = new Knight("black");
+        add(bKnight2, 6, 0);
+        bKnight2.setOnMouseClicked(this::togglePiece);
+        ChessPiece bRook1 = new Rook("black");
+        add(bRook1, 0, 0);
+        bRook1.setOnMouseClicked(this::togglePiece);
+        ChessPiece bRook2 = new Rook("black");
+        add(bRook2, 7, 0);
+        bRook2.setOnMouseClicked(this::togglePiece);
+        for (int i = 0; i < ChessGame.WIDTH; i++) {
+            bPawnArray[i] = new Pawn("black");
+            add(bPawnArray[i], i, 1);
+            bPawnArray[i].setOnMouseClicked(this::togglePiece);
+        }
     }
 }

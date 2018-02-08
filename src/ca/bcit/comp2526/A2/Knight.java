@@ -1,4 +1,5 @@
 package ca.bcit.comp2526.A2;
+import javafx.scene.text.Text;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.event.EventHandler;
@@ -8,17 +9,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
- * King.
+ * knight.
  *
  * @author Wilburt Herrera
  * @version 2018
  */
-public class King extends ChessPiece {
+public class Knight extends ChessPiece {
     
     /**
-     * King Image.
+     * Knight Image.
      */
-    private String kingImage = "\u265A";
+    private String knightImage = "\u265E";
     
     /**
      * Name.
@@ -31,12 +32,12 @@ public class King extends ChessPiece {
     private DropShadow dropShadow;
     
     /**
-     * Constructs an object of type King.
-     * @param colour of King
+     * Constructs an object of type Knight.
+     * @param colour of Knight
      */
-    public King(String colour) {
+    public Knight(String colour) {
         super(colour);
-        setText(kingImage);
+        setText(knightImage);
         setName(this);
         makeDropshadow();
 
@@ -61,14 +62,14 @@ public class King extends ChessPiece {
     }
     
     /**
-     * Sets the name of this King Object.
-     * @param king a King obj.
+     * Sets the name of this Knight Object.
+     * @param knight a Knight obj.
      */
-    public void setName(King king) {
+    public void setName(Knight knight) {
         if (super.getColour().equals("white")) {
-            name = "White King";
+            name = "White Knight";
         } else {
-            name = "Black King";
+            name = "Black Knight";
         }
     }
     
@@ -83,7 +84,7 @@ public class King extends ChessPiece {
     /**
      * Text to string.
      * @see java.lang.Text#toString()
-     * @return boop.
+     * @return a string
      */
     @Override
     public String toString() {
