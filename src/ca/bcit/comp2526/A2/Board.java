@@ -42,12 +42,18 @@ public class Board extends GridPane {
     
     private Integer objRow;
     
+    private Integer sqCol;
+    
+    private Integer sqRow;
+    
     private boolean active;
  
     /**
      * Keeps track of the event's source node.
      */
     private Node source;
+    
+    private Node squareSource;
     
     /**
      * Constructs an object of type Board.
@@ -61,43 +67,29 @@ public class Board extends GridPane {
      * Gets the position of the object within the grid pane.
      * @param e an event
      */
-    public void getPosition(MouseEvent e) {
-        source = (Node) e.getSource();
-        objCol = GridPane.getColumnIndex(source);
-        objRow = GridPane.getRowIndex(source);
-        System.out.println(objCol + " " + objRow);
-        System.out.println(source);
-    }
-    
-    /**
-     * Gets the position of the object within the grid pane.
-     * @param e an event
-     */
-    public void setPosition(MouseEvent e) {
-        source = (Node) e.getSource();
-        objCol = GridPane.getColumnIndex(source);
-        objRow = GridPane.getRowIndex(source);
-        System.out.println(objCol + " " + objRow);
-        setColumnIndex(source, objCol);
-        setRowIndex(source, objRow);
-        System.out.println("Setting Position");
-    }
-    
     public void move(MouseEvent e) {
-        active = !(active);
-        
-        source = (Node) e.getSource();
-        objCol = GridPane.getColumnIndex(source);
-        objRow = GridPane.getRowIndex(source);
-        System.out.println(objCol + " " + objRow);
-        System.out.println(source);
+        squareSource = (Node) e.getSource();
+        sqCol = GridPane.getColumnIndex(squareSource);
+        sqRow = GridPane.getRowIndex(squareSource);
+        System.out.println(sqCol + " " + sqRow);
+        System.out.println(squareSource);
         
         if (active) {
-            System.out.println("Active");
-            
-        } else {
-            System.out.println("Deslected");
+            setColumnIndex(source, sqCol);
+            setRowIndex(source, sqRow);
+            active = !(active);
         }
+    }
+    
+    
+    public void togglePiece(MouseEvent e) {
+        active = !(active);
+        source = (Node) e.getSource();
+        objCol = GridPane.getColumnIndex(source);
+        objRow = GridPane.getRowIndex(source);
+        
+        System.out.println(objCol + " " + objRow);
+        System.out.println(source);
     }
     
     /**
@@ -117,7 +109,7 @@ public class Board extends GridPane {
                 add(squareArray[x][y], x, y);
                 
                 // Returns coordinates of the square
-                squareArray[x][y].setOnMousePressed(this::getPosition);
+                squareArray[x][y].setOnMousePressed(this::move);
             }
         }
     } //End of makeGrid
@@ -128,11 +120,10 @@ public class Board extends GridPane {
     public void makePieces() {
         ChessPiece bKing = new King("black");
         ChessPiece wKing = new King("white");
-        add(bKing, 3, 3);
-        add(wKing, 0, 1);
+        add(bKing, 4, 0);
+        add(wKing, 4, 7);
         
-        bKing.setOnMouseClicked(this::move);
-        wKing.setOnMouseClicked(this::move);
-        wKing.setOnMousePressed(this::getPosition);
+        bKing.setOnMouseClicked(this::togglePiece);
+        wKing.setOnMouseClicked(this::togglePiece);
     }
 }
