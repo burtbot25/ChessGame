@@ -1,10 +1,5 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.text.Text;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
-import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -49,6 +44,7 @@ public class Pawn extends ChessPiece {
         
         setFont(new Font(ChessPiece.SIZE));
         
+        
     }
 
     /**
@@ -63,7 +59,7 @@ public class Pawn extends ChessPiece {
     
     /**
      * Sets the name of this Knight Object.
-     * @param knight a Knight obj.
+     * @param pawn a pawn obj.
      */
     public void setName(Pawn pawn) {
         if (super.getColour().equals("white")) {

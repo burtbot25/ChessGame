@@ -1,10 +1,5 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.text.Text;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
-import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 

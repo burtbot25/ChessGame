@@ -1,10 +1,7 @@
 package ca.bcit.comp2526.A2;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  * Board class.
@@ -41,38 +38,47 @@ public class Board extends GridPane {
     private String colour;
     
     /**
-     * X position of square.
+     * Piece col.
      */
-    private int xCor;
+    private Integer pCol;
     
     /**
-     * Y position of square.
+     * Piece row.
      */
-    private int yCor;
+    private Integer pRow;
     
-    private Integer objCol;
-    
-    private Integer objRow;
-    
+    /**
+     * Square col.
+     */
     private Integer sqCol;
     
+    /**
+     * Square row.
+     */
     private Integer sqRow;
     
+    /**
+     * Active piece tracker.
+     */
     private boolean active;
  
     /**
-     * Keeps track of the event's source node.
+     * Keeps track of PieceObject.
      */
-    private Node source;
+    private Node pieceNode;
     
-    private Node squareSource;
+    /**
+     * Keeps track of Square object.
+     */
+    private Node squareNode;
     
     /**
      * Constructs an object of type Board.
      */
     public Board() {
-        makeSquares();
-        makePieces();
+        setSquares();
+        setWhitePieces();
+        setBlackPieces();
     }
         
     /**
@@ -80,38 +86,49 @@ public class Board extends GridPane {
      * @param e an event
      */
     public void move(MouseEvent e) {
-        squareSource = (Node) e.getSource();
-        sqCol = GridPane.getColumnIndex(squareSource);
-        sqRow = GridPane.getRowIndex(squareSource);
+        squareNode = (Node) e.getSource();
+        sqCol = GridPane.getColumnIndex(squareNode);
+        sqRow = GridPane.getRowIndex(squareNode);
         System.out.println(sqCol + " " + sqRow);
-        System.out.println(squareSource);
+        System.out.println(squareNode);
         
         if (active) {
-            setColumnIndex(source, sqCol);
-            setRowIndex(source, sqRow);
+            setColumnIndex(pieceNode, sqCol);
+            setRowIndex(pieceNode, sqRow);
             active = !(active);
         }
-        
-        
     }
     
+    ////////////////////////////////////////////////////////////////
+    /* NOTE TO SELF. Right now you have the squares being clicked
+     * to move the piece to that space. You WILL need to make it
+     * so that you can click on a piece and the piece will over take it.
+     * Move will need to change its source to NOT just the square.*/
     
+    /**
+     * Toggles pieces selected. Active/Inactive.
+     * @param e a mouse event.
+     */
     public void togglePiece(MouseEvent e) {
         active = !(active);
-        source = (Node) e.getSource();
-        objCol = GridPane.getColumnIndex(source);
-        objRow = GridPane.getRowIndex(source);
         
-        System.out.println(objCol + " " + objRow);
-        System.out.println(source);
+        if (!active) {
+            active = !(active);
+            move(e);
+        }
         
-
+        pieceNode = (Node) e.getSource();
+        pCol = GridPane.getColumnIndex(pieceNode);
+        pRow = GridPane.getRowIndex(pieceNode);
+        System.out.println(pCol + " " + pRow);
+        System.out.println(pieceNode);
+        
     }
     
     /**
      * Creates the squares on the Grid.
      */
-    public void makeSquares() {
+    public void setSquares() {
         for (int x = 0; x < ChessGame.WIDTH; x++) {
             for (int y = 0; y < ChessGame.HEIGHT; y++) {
                 // Determines colour of square
@@ -131,10 +148,9 @@ public class Board extends GridPane {
     } //End of makeGrid
     
     /**
-     * Creates the pieces on the board.
+     * Creates and sets White Pieces.
      */
-    public void makePieces() {
-        // White Pieces
+    public void setWhitePieces() {
         ChessPiece wKing = new King("white");
         add(wKing, 4, 7);
         wKing.setOnMouseClicked(this::togglePiece);
@@ -165,7 +181,14 @@ public class Board extends GridPane {
             wPawnArray[i].setOnMouseClicked(this::togglePiece);
         }
         
-        // Black Pieces
+        //GridPane.setHalignment(wKing, HPos.CENTER);
+        //whitePiecesArray[0] = wKing;
+    }
+    
+    /**
+     * Creates and sets Black Pieces.
+     */
+    public void setBlackPieces() {
         ChessPiece bKing = new King("black");
         add(bKing, 4, 0);
         bKing.setOnMouseClicked(this::togglePiece);
