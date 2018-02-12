@@ -1,17 +1,25 @@
 package ca.bcit.comp2526.A2;
 
+import javafx.scene.input.MouseEvent;
+
 /**
- * Move
+ * Move.
  *
  * @author Wilburt Herrera
  * @version 2018
  */
-public class Move {
+public interface Move {
 
-    public Move() {
-    }
+    /**
+     * Moves piece.
+     * @param e Mouse event
+     */
+    void move(MouseEvent e);
     
-    public void movePiece() {
-        
-    }
+    /**
+     * Toggles selected piece.
+     * @param e Mouse event
+     */
+    void togglePiece(MouseEvent e);
+    
 }

@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -22,11 +21,6 @@ public class Bishop extends ChessPiece {
     private String name;
     
     /**
-     * Drop shadow object.
-     */
-    private DropShadow dropShadow;
-    
-    /**
      * Constructs an object of type Bishop.
      * @param colour of Bishop
      */
@@ -34,26 +28,14 @@ public class Bishop extends ChessPiece {
         super(colour);
         setText(bishopImage);
         setName(this);
-        makeDropshadow();
 
         // Assigns black or white icon
         if (colour.equals("white")) {
             setFill(Color.WHITE);
         }
-        this.setEffect(dropShadow);
         
         setFont(new Font(ChessPiece.SIZE));
         
-    }
-
-    /**
-     * Initializes dropshadow effect.
-     */
-    public void makeDropshadow() {
-        dropShadow = new DropShadow();
-        dropShadow.setRadius(5.0);
-        dropShadow.setOffsetX(3.0);
-        dropShadow.setOffsetY(3.0);
     }
     
     /**

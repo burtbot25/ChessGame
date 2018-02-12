@@ -1,5 +1,6 @@
 package ca.bcit.comp2526.A2;
 import javafx.scene.text.Text;
+import javafx.scene.effect.DropShadow;
 
 /**
  * ChessPiece.
@@ -15,10 +16,26 @@ import javafx.scene.text.Text;
  */
 abstract class ChessPiece extends Text {
 
+    
+    /**
+     * Drop shadow radius.
+     */
+    public static final double SHADOW_RADIUS = 5;
+    
+    /**
+     * Drop shadow offset.
+     */
+    public static final double SHADOW_OFFSET = 3;
+    
     /**
      * Size of the chess piece.
      */
     public static final int SIZE = 50;
+    
+    /**
+     * Drop shadow object.
+     */
+    private DropShadow dropShadow;
     
     /**
      * Colour of piece.
@@ -31,6 +48,18 @@ abstract class ChessPiece extends Text {
      */
     ChessPiece(String colour) {
         this.colour = colour;
+        makeDropshadow();
+        this.setEffect(dropShadow);
+    }
+    
+    /**
+     * Initializes dropshadow effect.
+     */
+    public void makeDropshadow() {
+        dropShadow = new DropShadow();
+        dropShadow.setRadius(SHADOW_RADIUS);
+        dropShadow.setOffsetX(SHADOW_OFFSET);
+        dropShadow.setOffsetY(SHADOW_OFFSET);
     }
 
     /**

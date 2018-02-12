@@ -12,7 +12,67 @@ import javafx.scene.layout.GridPane;
  * @author Wilburt Herrera
  * @version 2018
  */
-public class Board extends GridPane {
+public class Board extends GridPane implements Move {
+    
+    /**
+     * Chess Row 1. White non-pawn row.
+     */
+    public static final int CHESS_ROW1 = 7;
+    
+    /**
+     * Chess Row 2. White pawn row.
+     */
+    public static final int CHESS_ROW2 = 6;
+    
+    /**
+     * Chess Row 7. Black pawn row.
+     */
+    public static final int CHESS_ROW7 = 1;
+    
+    /**
+     * Chess Row 8. Black non-pawn row.
+     */
+    public static final int CHESS_ROW8 = 0;
+    
+    /**
+     * Rook1 pos.
+     */
+    public static final int ROOK1 = 0;
+    
+    /**
+     * Rook2 pos.
+     */
+    public static final int ROOK2 = 7;
+    
+    /**
+     * Knight1 pos.
+     */
+    public static final int KNIGHT1 = 1;
+    
+    /**
+     * Knight2 pos.
+     */
+    public static final int KNIGHT2 = 6;
+    
+    /**
+     * BISHOP1 pos.
+     */
+    public static final int BISHOP1 = 2;
+    
+    /**
+     * BISHOP2 pos.
+     */
+    public static final int BISHOP2 = 5;
+    
+    /**
+     * King pos.
+     */
+    public static final int KING = 4;
+    
+    /**
+     * Queen pos.
+     */
+    public static final int QUEEN = 3;
     
     /**
      * Holds all the squares in an array.
@@ -99,12 +159,6 @@ public class Board extends GridPane {
         }
     }
     
-    ////////////////////////////////////////////////////////////////
-    /* NOTE TO SELF. Right now you have the squares being clicked
-     * to move the piece to that space. You WILL need to make it
-     * so that you can click on a piece and the piece will over take it.
-     * Move will need to change its source to NOT just the square.*/
-    
     /**
      * Toggles pieces selected. Active/Inactive.
      * @param e a mouse event.
@@ -138,7 +192,6 @@ public class Board extends GridPane {
                     colour = "light grey";
                 }
                 squareArray[x][y] = new Square(colour, x, y);
-
                 add(squareArray[x][y], x, y);
                 
                 // Returns coordinates of the square
@@ -152,32 +205,32 @@ public class Board extends GridPane {
      */
     public void setWhitePieces() {
         ChessPiece wKing = new King("white");
-        add(wKing, 4, 7);
+        add(wKing, KING, CHESS_ROW1);
         wKing.setOnMouseClicked(this::togglePiece);
         ChessPiece wQueen = new Queen("white");
-        add(wQueen, 3, 7);
+        add(wQueen, QUEEN, CHESS_ROW1);
         wQueen.setOnMouseClicked(this::togglePiece);
         ChessPiece wBishop1 = new Bishop("white");
-        add(wBishop1, 2, 7);
+        add(wBishop1, BISHOP1, CHESS_ROW1);
         wBishop1.setOnMouseClicked(this::togglePiece);
         ChessPiece wBishop2 = new Bishop("white");
-        add(wBishop2, 5, 7);
+        add(wBishop2, BISHOP2, CHESS_ROW1);
         wBishop2.setOnMouseClicked(this::togglePiece);
         ChessPiece wKnight1 = new Knight("white");
-        add(wKnight1, 1, 7);
+        add(wKnight1, KNIGHT1, CHESS_ROW1);
         wKnight1.setOnMouseClicked(this::togglePiece);
         ChessPiece wKnight2 = new Knight("white");
-        add(wKnight2, 6, 7);
+        add(wKnight2, KNIGHT2, CHESS_ROW1);
         wKnight2.setOnMouseClicked(this::togglePiece);
         ChessPiece wRook1 = new Rook("white");
-        add(wRook1, 0, 7);
+        add(wRook1, ROOK1, CHESS_ROW1);
         wRook1.setOnMouseClicked(this::togglePiece);
         ChessPiece wRook2 = new Rook("white");
-        add(wRook2, 7, 7);
+        add(wRook2, ROOK2, CHESS_ROW1);
         wRook2.setOnMouseClicked(this::togglePiece);
         for (int i = 0; i < ChessGame.WIDTH; i++) {
             wPawnArray[i] = new Pawn("white");
-            add(wPawnArray[i], i, 6);
+            add(wPawnArray[i], i, CHESS_ROW2);
             wPawnArray[i].setOnMouseClicked(this::togglePiece);
         }
         
@@ -190,32 +243,32 @@ public class Board extends GridPane {
      */
     public void setBlackPieces() {
         ChessPiece bKing = new King("black");
-        add(bKing, 4, 0);
+        add(bKing, KING, CHESS_ROW8);
         bKing.setOnMouseClicked(this::togglePiece);
         ChessPiece bQueen = new Queen("black");
-        add(bQueen, 3, 0);
+        add(bQueen, QUEEN, CHESS_ROW8);
         bQueen.setOnMouseClicked(this::togglePiece);
         ChessPiece bBishop1 = new Bishop("black");
-        add(bBishop1, 2, 0);
+        add(bBishop1, BISHOP1, CHESS_ROW8);
         bBishop1.setOnMouseClicked(this::togglePiece);
         ChessPiece bBishop2 = new Bishop("black");
-        add(bBishop2, 5, 0);
+        add(bBishop2, BISHOP2, CHESS_ROW8);
         bBishop2.setOnMouseClicked(this::togglePiece);
         ChessPiece bKnight1 = new Knight("black");
-        add(bKnight1, 1, 0);
+        add(bKnight1, KNIGHT1, CHESS_ROW8);
         bKnight1.setOnMouseClicked(this::togglePiece);
         ChessPiece bKnight2 = new Knight("black");
-        add(bKnight2, 6, 0);
+        add(bKnight2, KNIGHT2, CHESS_ROW8);
         bKnight2.setOnMouseClicked(this::togglePiece);
         ChessPiece bRook1 = new Rook("black");
-        add(bRook1, 0, 0);
+        add(bRook1, ROOK1, CHESS_ROW8);
         bRook1.setOnMouseClicked(this::togglePiece);
         ChessPiece bRook2 = new Rook("black");
-        add(bRook2, 7, 0);
+        add(bRook2, ROOK2, CHESS_ROW8);
         bRook2.setOnMouseClicked(this::togglePiece);
         for (int i = 0; i < ChessGame.WIDTH; i++) {
             bPawnArray[i] = new Pawn("black");
-            add(bPawnArray[i], i, 1);
+            add(bPawnArray[i], i, CHESS_ROW7);
             bPawnArray[i].setOnMouseClicked(this::togglePiece);
         }
     }

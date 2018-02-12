@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -49,13 +48,10 @@ public class Square extends Rectangle {
         setWidth(ChessGame.SQUARE_SIZE);
         setHeight(ChessGame.SQUARE_SIZE);
         
-        relocate(x * ChessGame.SQUARE_SIZE, y * ChessGame.SQUARE_SIZE);
+        setColour();
         
-        if (colour.equals("grey")) {
-            setFill(Color.GREY);
-        } else {
-            setFill(Color.LIGHTGREY);
-        }
+        this.setOnMouseEntered(this::selected);
+        this.setOnMouseExited(this::selected);
         
     }
     
@@ -65,12 +61,22 @@ public class Square extends Rectangle {
      */
     public void selected(MouseEvent me) {
         if (!toggle) {
-            setStrokeWidth(2);
-            setStroke(Color.BLUE);
+            setFill(Color.CYAN);
             toggle = true;
         } else {
-            setStroke(null);
+            setColour();
             toggle = false;
+        }
+    }
+    
+    /**
+     * Sets Color.
+     */
+    public void setColour() {
+        if (colour.equals("grey")) {
+            this.setFill(Color.GREY);
+        } else {
+            this.setFill(Color.LIGHTGREY);
         }
     }
     
@@ -88,10 +94,6 @@ public class Square extends Rectangle {
      */
     public int getYCor() {
         return yCor;
-    }
-
-    public boolean occupied() {
-        return false;
     }
 
     /**
