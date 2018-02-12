@@ -108,14 +108,14 @@ public class Board extends GridPane implements Move {
     private Integer pRow;
     
     /**
-     * Square col.
+     * Destination col.
      */
-    private Integer sqCol;
+    private Integer destCol;
     
     /**
-     * Square row.
+     * Destination row.
      */
-    private Integer sqRow;
+    private Integer destRow;
     
     /**
      * Active piece tracker.
@@ -128,9 +128,9 @@ public class Board extends GridPane implements Move {
     private Node pieceNode;
     
     /**
-     * Keeps track of Square object.
+     * Keeps track of Destination object.
      */
-    private Node squareNode;
+    private Node destNode;
     
     /**
      * Constructs an object of type Board.
@@ -146,15 +146,15 @@ public class Board extends GridPane implements Move {
      * @param e an event
      */
     public void move(MouseEvent e) {
-        squareNode = (Node) e.getSource();
-        sqCol = GridPane.getColumnIndex(squareNode);
-        sqRow = GridPane.getRowIndex(squareNode);
-        System.out.println(sqCol + " " + sqRow);
-        System.out.println(squareNode);
+        destNode = (Node) e.getSource();
+        destCol = GridPane.getColumnIndex(destNode);
+        destRow = GridPane.getRowIndex(destNode);
+        System.out.println(destCol + " " + destRow);
+        System.out.println(destNode);
         
         if (active) {
-            setColumnIndex(pieceNode, sqCol);
-            setRowIndex(pieceNode, sqRow);
+            setColumnIndex(pieceNode, destCol);
+            setRowIndex(pieceNode, destRow);
             active = !(active);
         }
     }
@@ -169,6 +169,7 @@ public class Board extends GridPane implements Move {
         if (!active) {
             active = !(active);
             move(e);
+            getChildren().remove(destNode);
         }
         
         pieceNode = (Node) e.getSource();
