@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -11,6 +10,11 @@ import javafx.scene.text.Font;
 public class Rook extends ChessPiece {
     
     /**
+     * Rook Serial.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Rook Image.
      */
     private String rookImage = "\u265C";
@@ -18,48 +22,62 @@ public class Rook extends ChessPiece {
     /**
      * Name.
      */
-    private String name;
-    
-
+    private String name = "Rook";
     
     /**
      * Constructs an object of type Rook.
      * @param colour of Rook
+     * @param xCor an int
+     * @param yCor an int
      */
-    public Rook(String colour) {
-        super(colour);
+    public Rook(String colour, int xCor, int yCor) {
+        super(colour, xCor, yCor);
         setText(rookImage);
-        setName(this);
 
         // Assigns black or white icon
-        if (colour.equals("white")) {
-            setFill(Color.WHITE);
-        }
-        
-        
+        setColour();
         setFont(new Font(ChessPiece.SIZE));
+    }
+    
+    /**
+     * Gets the name.
+     * @see ca.bcit.comp2526.A2.ChessPiece#getName()
+     * @return name.
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * Checks if valid move.
+     * @see ca.bcit.comp2526.A2.ChessPiece#validMove(int, int, int, int)
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return boolean
+     */
+    @Override
+    public boolean validMove(Square[][] squareArray, int fromX, int fromY,
+            int toX, int toY) {
         
-    }
-
-
-    
-    /**
-     * Sets the name of this Rook Object.
-     * @param rook a rook obj.
-     */
-    public void setName(Rook rook) {
-        if (super.getColour().equals("white")) {
-            name = "White Rook";
-        } else {
-            name = "Black Rook";
+        // Vertical
+        if (toX == fromX) {
+            
+            if (fromY > toY) {
+                return checkPath(squareArray, 0, -1, fromX, fromY, toX, toY);
+            } else {
+                return checkPath(squareArray, 0, 1, fromX, fromY, toX, toY);
+            }
+        } 
+        // Horizontal
+        if (toY == fromY) {
+            if (fromX > toX) {
+                return checkPath(squareArray, -1, 0, fromX, fromY, toX, toY);
+            } else {
+                return checkPath(squareArray, 1, 0, fromX, fromY, toX, toY);
+            }
         }
-    }
-    
-    /**
-     * Checks if the move is performing a valid move.
-     * @return a boolean.
-     */
-    public boolean validMove() {
         return false;
     }
 
@@ -70,7 +88,7 @@ public class Rook extends ChessPiece {
      */
     @Override
     public String toString() {
-        return (name + " clicked");
+        return (getColour() + " " + name);
     }
 
 }

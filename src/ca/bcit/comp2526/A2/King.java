@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -11,6 +10,11 @@ import javafx.scene.text.Font;
 public class King extends ChessPiece {
     
     /**
+     * King Serial.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * King Image.
      */
     private String kingImage = "\u265A";
@@ -18,54 +22,59 @@ public class King extends ChessPiece {
     /**
      * Name.
      */
-    private String name;
+    private String name = "King";
     
     /**
      * Constructs an object of type King.
      * @param colour of King
+     * @param xCor an int
+     * @param yCor an int
      */
-    public King(String colour) {
-        super(colour);
+    public King(String colour, int xCor, int yCor) {
+        super(colour, xCor, yCor);
         setText(kingImage);
-        setName(this);
 
         // Assigns black or white icon
-        if (colour.equals("white")) {
-            setFill(Color.WHITE);
-        }
+        setColour();
         
         setFont(new Font(ChessPiece.SIZE));
         
     }
     
     /**
-     * Sets the name of this King Object.
-     * @param king a King obj.
+     * Get Name.
+     * @see ca.bcit.comp2526.A2.ChessPiece#getName()
+     * @return name.
      */
-    public void setName(King king) {
-        if (super.getColour().equals("white")) {
-            name = "White King";
-        } else {
-            name = "Black King";
-        }
+    public String getName() {
+        return name;
     }
     
     /**
-     * Checks if the move is performing a valid move.
-     * @return a boolean.
-     */
-    public boolean validMove() {
-        return false;
-    }
-
-    /**
      * Text to string.
      * @see java.lang.Text#toString()
-     * @return boop.
+     * @return a string
      */
     @Override
     public String toString() {
-        return (name + " clicked");
+        return (getColour() + " " + name);
+    }
+
+    /**
+     * Checks if valid move.
+     * @see ca.bcit.comp2526.A2.ChessPiece#validMove(int, int, int, int)
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return a boolean
+     */
+    @Override
+    boolean validMove(Square[][] squareArray, int fromX, int fromY,
+            int toX, int toY) {
+        int move = (int) (Math.pow((toX - fromX), 2) 
+                + Math.pow((toY - fromY), 2));
+        return (move == 1 || move == 2);
     }
 
 }

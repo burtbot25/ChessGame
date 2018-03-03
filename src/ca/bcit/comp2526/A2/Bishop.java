@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -9,7 +8,12 @@ import javafx.scene.text.Font;
  * @version 2018
  */
 public class Bishop extends ChessPiece {
-    
+
+    /**
+     * Bishop Serial.
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Bishop Image.
      */
@@ -18,46 +22,34 @@ public class Bishop extends ChessPiece {
     /**
      * Name.
      */
-    private String name;
+    private String name = "Bishop";
     
     /**
      * Constructs an object of type Bishop.
      * @param colour of Bishop
+     * @param xCor an int
+     * @param yCor an int
      */
-    public Bishop(String colour) {
-        super(colour);
+    public Bishop(String colour, int xCor, int yCor) {
+        super(colour, xCor, yCor);
         setText(bishopImage);
-        setName(this);
 
         // Assigns black or white icon
-        if (colour.equals("white")) {
-            setFill(Color.WHITE);
-        }
+        setColour();
         
         setFont(new Font(ChessPiece.SIZE));
         
     }
-    
-    /**
-     * Sets the name of this Bishop Object.
-     * @param bishop a Bishop obj.
-     */
-    public void setName(Bishop bishop) {
-        if (super.getColour().equals("white")) {
-            name = "White Bishop";
-        } else {
-            name = "Black Bishop";
-        }
-    }
-    
-    /**
-     * Checks if the move is performing a valid move.
-     * @return a boolean.
-     */
-    public boolean validMove() {
-        return false;
-    }
 
+    /**
+     * Gets the name.
+     * @see ca.bcit.comp2526.A2.ChessPiece#getName()
+     * @return a name;
+     */
+    public String getName() {
+        return name;
+    }
+    
     /**
      * Text to string.
      * @see java.lang.Text#toString()
@@ -65,7 +57,48 @@ public class Bishop extends ChessPiece {
      */
     @Override
     public String toString() {
-        return (name + " clicked");
+        return (getColour() + " " + name);
+    }
+
+    /**
+     * Checks if valid move.
+     * @see ca.bcit.comp2526.A2.ChessPiece#validMove(int, int, int, int)
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return boolean
+     */
+    @Override
+    boolean validMove(Square[][] squareArray, int fromX, int fromY,
+            int toX, int toY) {
+        
+        // Up-left
+        if (fromX - toX > 0 && fromX - toX == fromY - toY) {
+            System.out.println("upleft");
+            return checkPath(squareArray, -1, -1, fromX, fromY, toX, toY);
+        }
+        
+        // Up-right
+        if (fromX - toX < 0 && fromX - toX == (fromY - toY) * -1) {
+            System.out.println("upright");
+            return checkPath(squareArray, 1, -1, fromX, fromY, toX, toY);
+        }
+        
+        // Down-left
+        if (fromX - toX > 0 && fromX - toX == (fromY - toY) * -1) {
+            System.out.println("downleft");
+            return checkPath(squareArray, -1, 1, fromX, fromY, toX, toY);
+        }
+        
+        // Down-right
+        if (fromX - toX < 0 && fromX - toX == fromY - toY) {
+            System.out.println("downright");
+            return checkPath(squareArray, 1, 1, fromX, fromY, toX, toY);
+        }
+        
+        
+        return false;
     }
 
 }

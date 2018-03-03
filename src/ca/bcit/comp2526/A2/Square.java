@@ -34,6 +34,11 @@ public class Square extends Rectangle {
     private int yCor;
     
     /**
+     * Chess piece on Square.
+     */
+    private ChessPiece piece;
+    
+    /**
      * Constructs an object of type Square.
      * @param colour of square
      * @param x location
@@ -50,8 +55,8 @@ public class Square extends Rectangle {
         
         setColour();
         
-        this.setOnMouseEntered(this::selected);
-        this.setOnMouseExited(this::selected);
+        this.setOnMouseEntered(this::hover);
+        this.setOnMouseExited(this::hover);
         
     }
     
@@ -59,7 +64,7 @@ public class Square extends Rectangle {
      * Highlights the borders blue when selected.
      * @param me an event.
      */
-    public void selected(MouseEvent me) {
+    public void hover(MouseEvent me) {
         if (!toggle) {
             setFill(Color.CYAN);
             toggle = true;
@@ -84,7 +89,7 @@ public class Square extends Rectangle {
      * Returns the x for this Square.
      * @return x
      */
-    public int getXCor() {
+    public int getxCor() {
         return xCor;
     }
 
@@ -92,7 +97,7 @@ public class Square extends Rectangle {
      * Returns the y for this Square.
      * @return y
      */
-    public int getYCor() {
+    public int getyCor() {
         return yCor;
     }
 
@@ -103,7 +108,30 @@ public class Square extends Rectangle {
      */
     @Override
     public String toString() {
-        return "Square [toggle=" + toggle + ", colour=" + colour 
-                + ", xCor=" + xCor + ", yCor=" + yCor + "]";
+        return colour + " Square";
+    }
+    
+    /**
+     * Gets square source.
+     * @return an Object.
+     */
+    public Object getSource() {
+        return new Square(null, 0, 0);
+    }
+
+    /**
+     * Returns the piece for this Square.
+     * @return piece
+     */
+    public ChessPiece getPiece() {
+        return piece;
+    }
+
+    /**
+     * Sets the piece for this Square.
+     * @param piece the piece to set
+     */
+    public void setPiece(ChessPiece piece) {
+        this.piece = piece;
     }
 }

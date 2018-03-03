@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -11,6 +10,11 @@ import javafx.scene.text.Font;
 public class Pawn extends ChessPiece {
     
     /**
+     * Pawn Serial.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Pawn Image.
      */
     private String pawnImage = "\u265F";
@@ -18,45 +22,36 @@ public class Pawn extends ChessPiece {
     /**
      * Name.
      */
-    private String name;
+    private String name = "Pawn";
+    
+    /**
+     * Has moved.
+     */
+    private boolean moved = true;
     
     /**
      * Constructs an object of type Pawn.
      * @param colour of Pawn
+     * @param xCor an int
+     * @param yCor an int
      */
-    public Pawn(String colour) {
-        super(colour);
+    public Pawn(String colour, int xCor, int yCor) {
+        super(colour, xCor, yCor);
         setText(pawnImage);
-        setName(this);
 
         // Assigns black or white icon
-        if (colour.equals("white")) {
-            setFill(Color.WHITE);
-        }
+        setColour();
         
         setFont(new Font(ChessPiece.SIZE));
         
     }
-
     
     /**
-     * Sets the name of this Knight Object.
-     * @param pawn a pawn obj.
+     * Gets the name of this Knight Object.
+     * @return a String
      */
-    public void setName(Pawn pawn) {
-        if (super.getColour().equals("white")) {
-            name = "White Pawn";
-        } else {
-            name = "Black Pawn";
-        }
-    }
-    
-    /**
-     * Checks if the move is performing a valid move.
-     * @return a boolean.
-     */
-    public boolean validMove() {
-        return false;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -66,7 +61,51 @@ public class Pawn extends ChessPiece {
      */
     @Override
     public String toString() {
-        return (name + " clicked");
+        return (getColour() + " " + name);
     }
 
+
+    /**
+     * Checks if valid move.
+     * @see ca.bcit.comp2526.A2.ChessPiece#validMove(int, int, int, int)
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return boolean
+     */
+    @Override
+    boolean validMove(Square[][] squareArray, int fromX, int fromY,
+            int toX, int toY) {
+        if (toX == fromX && colourValid(fromY, toY)) {
+            if (Math.abs(fromY - toY) > 2) {
+                return false;
+            } else if (!moved && Math.abs(fromY - toY) == 2) {
+                return false;
+            }    
+            moved = false;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if valid depending on the colour.
+     * @param fromY an int
+     * @param toY an int
+     * @return boolean
+     */
+    boolean colourValid(int fromY, int toY) {
+        if (getColour().equals("black")) {
+            if (fromY < toY) {
+                return true;
+            }
+        } else if (getColour().equals("white")) {
+            if (fromY > toY) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

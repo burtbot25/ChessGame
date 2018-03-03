@@ -1,5 +1,4 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -11,6 +10,11 @@ import javafx.scene.text.Font;
 public class Queen extends ChessPiece {
     
     /**
+     * Queen Serial.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Queen Image.
      */
     private String queenImage = "\u265B";
@@ -18,45 +22,32 @@ public class Queen extends ChessPiece {
     /**
      * Name.
      */
-    private String name;
+    private String name = "Queen";
     
     /**
      * Constructs an object of type Queen.
      * @param colour of Queen
+     * @param xCor an int
+     * @param yCor an int
      */
-    public Queen(String colour) {
-        super(colour);
+    public Queen(String colour, int xCor, int yCor) {
+        super(colour, xCor, yCor);
         setText(queenImage);
-        setName(this);
 
         // Assigns black or white icon
-        if (colour.equals("white")) {
-            setFill(Color.WHITE);
-        }
+        setColour();
         
         setFont(new Font(ChessPiece.SIZE));
         
     }
-
     
     /**
-     * Sets the name of this Queen Object.
-     * @param queen a Queen obj.
+     * Gets the name.
+     * @see ca.bcit.comp2526.A2.ChessPiece#getName()
+     * @return a name
      */
-    public void setName(Queen queen) {
-        if (super.getColour().equals("white")) {
-            name = "White Queen";
-        } else {
-            name = "Black Queen";
-        }
-    }
-    
-    /**
-     * Checks if the move is performing a valid move.
-     * @return a boolean.
-     */
-    public boolean validMove() {
-        return false;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -66,7 +57,62 @@ public class Queen extends ChessPiece {
      */
     @Override
     public String toString() {
-        return (name + " clicked");
+        return (getColour() + " " + name);
+    }
+
+
+    /**
+     * Checks if valid move.
+     * @see ca.bcit.comp2526.A2.ChessPiece#validMove(int, int, int, int)
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return boolean
+     */
+    @Override
+    boolean validMove(Square[][] squareArray, int fromX, int fromY,
+            int toX, int toY) {
+        
+        // Diagonal Movements
+        // Up-left
+        if (fromX - toX > 0 && fromX - toX == fromY - toY) {
+            return checkPath(squareArray, -1, -1, fromX, fromY, toX, toY);
+        }
+        
+        // Up-right
+        if (fromX - toX < 0 && fromX - toX == (fromY - toY) * -1) {
+            return checkPath(squareArray, 1, -1, fromX, fromY, toX, toY);
+        }
+        
+        // Down-left
+        if (fromX - toX > 0 && fromX - toX == (fromY - toY) * -1) {
+            return checkPath(squareArray, -1, 1, fromX, fromY, toX, toY);
+        }
+        
+        // Down-right
+        if (fromX - toX < 0 && fromX - toX == fromY - toY) {
+            return checkPath(squareArray, 1, 1, fromX, fromY, toX, toY);
+        }
+        
+        // Vertical
+        if (toX == fromX) {
+            
+            if (fromY > toY) {
+                return checkPath(squareArray, 0, -1, fromX, fromY, toX, toY);
+            } else {
+                return checkPath(squareArray, 0, 1, fromX, fromY, toX, toY);
+            }
+        } 
+        // Horizontal
+        if (toY == fromY) {
+            if (fromX > toX) {
+                return checkPath(squareArray, -1, 0, fromX, fromY, toX, toY);
+            } else {
+                return checkPath(squareArray, 1, 0, fromX, fromY, toX, toY);
+            }
+        }
+        return false;
     }
 
 }

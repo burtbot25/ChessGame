@@ -1,5 +1,6 @@
 package ca.bcit.comp2526.A2;
-import javafx.scene.Node;
+import java.io.Serializable;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -12,8 +13,18 @@ import javafx.scene.layout.GridPane;
  * @author Wilburt Herrera
  * @version 2018
  */
-public class Board extends GridPane implements Move {
+public class Board extends GridPane implements Move, Serializable {
     
+    /**
+     * Board width.
+     */
+    public static final int WIDTH = 8;
+    
+    /**
+     * Board height.
+     */
+    public static final int HEIGHT = 8;
+
     /**
      * Chess Row 1. White non-pawn row.
      */
@@ -75,47 +86,47 @@ public class Board extends GridPane implements Move {
     public static final int QUEEN = 3;
     
     /**
+     * Board Serial.
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
      * Holds all the squares in an array.
      */
-    private Square[][] squareArray = 
-            new Square[ChessGame.WIDTH][ChessGame.HEIGHT];
+    protected Square[][] squareArray = 
+            new Square[WIDTH][HEIGHT];
     
     /**
      * Holds all the black pawns in an array.
      */
     private ChessPiece[] bPawnArray = 
-            new Pawn[ChessGame.WIDTH];
+            new Pawn[WIDTH];
     
     /**
      * Holds all the white pawns in an array.
      */
     private ChessPiece[] wPawnArray = 
-            new Pawn[ChessGame.WIDTH];
+            new Pawn[WIDTH];
+    
+    /**
+     * Keeps track of whose turn it is.
+     */
+    private String turn = "white";
     
     /**
      * Color of square.
      */
-    private String colour;
-    
-    /**
-     * Piece col.
-     */
-    private Integer pCol;
-    
-    /**
-     * Piece row.
-     */
-    private Integer pRow;
-    
+    private String squareColour;
+   
     /**
      * Destination col.
      */
-    private Integer destCol;
+    private int destCol;
     
     /**
      * Destination row.
      */
-    private Integer destRow;
+    private int destRow;
     
     /**
      * Active piece tracker.
@@ -125,115 +136,225 @@ public class Board extends GridPane implements Move {
     /**
      * Keeps track of PieceObject.
      */
-    private Node pieceNode;
+    private ChessPiece pieceNode;
     
     /**
-     * Keeps track of Destination object.
+     * Destination square.
      */
-    private Node destNode;
+    private Square destSquare;
+    
+    /**
+     * Destination piece.
+     */
+    private ChessPiece destPiece;
+
     
     /**
      * Constructs an object of type Board.
      */
     public Board() {
+//        printBoard();
+    }
+    
+//    /**
+//     * Prints the board.
+//     */
+//    public void printBoard() {
+//        for (int i = 0; i < WIDTH; i++) {
+//            for (int j = 0; j < HEIGHT; j++) {
+//                System.out.print(squareArray[j][i].getPiece() + " ");
+//                if (j == WIDTH - 1) {
+//                    System.out.println();
+//                }
+//            }
+//        }
+//    }
+    
+//    /**
+//     * Sets new game button.
+//     */
+//    public void setNewGame() {
+//        Button newGame = new Button("New Game");
+//        add(newGame, 11, 0);
+//        newGame.setOnMousePressed(this::newGameHandler);
+//    }
+    
+    /**
+     * Sets up a new board.
+     */
+    public void newGame() {
+        getChildren().clear();
         setSquares();
         setWhitePieces();
         setBlackPieces();
+        //setNewGame();
+        //new ChessGame().setSaveLoad();
+
     }
-        
+    
     /**
-     * Gets the position of the object within the grid pane.
-     * @param e an event
+     * Sets up a new board.
+     * @param clicked a MouseEvent
      */
-    public void move(MouseEvent e) {
-        destNode = (Node) e.getSource();
-        destCol = GridPane.getColumnIndex(destNode);
-        destRow = GridPane.getRowIndex(destNode);
-        System.out.println(destCol + " " + destRow);
-        System.out.println(destNode);
-        
-        if (active) {
-            setColumnIndex(pieceNode, destCol);
-            setRowIndex(pieceNode, destRow);
+    private void newGameHandler(MouseEvent clicked) {
+        newGame();
+    }
+
+    /**
+     * Toggles piece selected. Active/Inactive.
+     * @param click a mouse event.
+     */
+    public void togglePiece(MouseEvent click) {
+        active = !(active);
+        if (!active) {
             active = !(active);
+            if (move(click)) {
+                capture();
+            }
+        }
+        getPieceInfo(click);
+    }
+    
+    /**
+     * Check if it's the correct player's turn.
+     * @return a boolean.
+     */
+    public boolean turnCheck() {
+        if (turn.equals(pieceNode.getColour())) {
+            System.out.println("Turn Change");
+            return true;
+        } else {
+            System.out.println("Not your turn");
+        }
+        return false;
+    }
+    
+    /**
+     * Moves piece to the destination.
+     * @param click an event
+     * @return a boolean
+     */
+    public boolean move(MouseEvent click) {
+        getDestinationInfo(click);
+        if (isValid(click) && active && turnCheck()) {
+            setDestination();
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Checks if move is valid based on the corresponding piece.
+     * @param click an event
+     * @return a boolean
+     */
+    public boolean isValid(MouseEvent click) {
+        return (pieceNode.validMove(squareArray, pieceNode.getxCor(),
+                pieceNode.getyCor(), destCol, destRow));
+    }
+
+    
+    /**
+     * Sets piece destination.
+     */
+    private void setDestination() {
+        
+        //Sets piece to new Col and Row
+        setColumnIndex(pieceNode, destCol);
+        setRowIndex(pieceNode, destRow);
+        
+        //Swaps piece location
+        squareArray[pieceNode.getxCor()][pieceNode.getyCor()].setPiece(null);
+        squareArray[destCol][destRow].setPiece(pieceNode);
+        
+        //Update's piece's internal x and y coordinates
+        pieceNode.setxCor(destCol);
+        pieceNode.setyCor(destRow);
+        active = !(active);
+        
+        if (turn.equals("white")) {
+            turn = "black";
+            System.out.println("Black's turn");
+        } else {
+            turn = "white";
+            System.out.println("White's turn");
+        }
+        
+//        printBoard();
+    }
+    
+    /**
+     * Obtains destination's source information.
+     * @param click a MouseEvent
+     */
+    private void getDestinationInfo(MouseEvent click) {
+        
+        if (click.getSource() instanceof Square) {
+            destSquare = (Square) click.getSource();
+            destCol = GridPane.getColumnIndex(destSquare);
+            destRow = GridPane.getRowIndex(destSquare);
+            System.out.println(destCol + " " + destRow + " " + destSquare);
+        } else {
+            destPiece = (ChessPiece) click.getSource();
+            destCol = GridPane.getColumnIndex(destPiece);
+            destRow = GridPane.getRowIndex(destPiece);
+            System.out.println(destCol + " " + destRow + " " + destPiece);
+        }
+    }
+    
+    
+    /**
+     * Obtains chess piece's source information.
+     * @param click a Mouse Event
+     */
+    private void getPieceInfo(MouseEvent click) {
+        pieceNode = (ChessPiece) click.getSource();
+        if (active) {
+            System.out.println(pieceNode.getxCor() + " " + pieceNode.getyCor()
+                    + " " + pieceNode + " selected");
         }
     }
     
     /**
-     * Toggles pieces selected. Active/Inactive.
-     * @param e a mouse event.
+     * Removes captured piece.
      */
-    public void togglePiece(MouseEvent e) {
-        active = !(active);
-        
-        if (!active) {
-            active = !(active);
-            move(e);
-            getChildren().remove(destNode);
+    private void capture() {
+        if (destPiece != pieceNode) {
+            getChildren().remove(destPiece);
+            System.out.println(destPiece + " captured");
         }
-        
-        pieceNode = (Node) e.getSource();
-        pCol = GridPane.getColumnIndex(pieceNode);
-        pRow = GridPane.getRowIndex(pieceNode);
-        System.out.println(pCol + " " + pRow);
-        System.out.println(pieceNode);
-        
     }
     
     /**
      * Creates the squares on the Grid.
      */
     public void setSquares() {
-        for (int x = 0; x < ChessGame.WIDTH; x++) {
-            for (int y = 0; y < ChessGame.HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
                 // Determines colour of square
-                if ((x + y) % 2 == 0) {
-                    colour = "grey";
-                } else {
-                    colour = "light grey";
-                }
-                squareArray[x][y] = new Square(colour, x, y);
+                squareColour = ((x + y) % 2 == 0) ? "grey" : "light grey";
+                squareArray[x][y] = new Square(squareColour, x, y);
                 add(squareArray[x][y], x, y);
                 
                 // Returns coordinates of the square
                 squareArray[x][y].setOnMousePressed(this::move);
             }
         }
-    } //End of makeGrid
+    }
     
     /**
      * Creates and sets White Pieces.
      */
-    public void setWhitePieces() {
-        ChessPiece wKing = new King("white");
-        add(wKing, KING, CHESS_ROW1);
-        wKing.setOnMouseClicked(this::togglePiece);
-        ChessPiece wQueen = new Queen("white");
-        add(wQueen, QUEEN, CHESS_ROW1);
-        wQueen.setOnMouseClicked(this::togglePiece);
-        ChessPiece wBishop1 = new Bishop("white");
-        add(wBishop1, BISHOP1, CHESS_ROW1);
-        wBishop1.setOnMouseClicked(this::togglePiece);
-        ChessPiece wBishop2 = new Bishop("white");
-        add(wBishop2, BISHOP2, CHESS_ROW1);
-        wBishop2.setOnMouseClicked(this::togglePiece);
-        ChessPiece wKnight1 = new Knight("white");
-        add(wKnight1, KNIGHT1, CHESS_ROW1);
-        wKnight1.setOnMouseClicked(this::togglePiece);
-        ChessPiece wKnight2 = new Knight("white");
-        add(wKnight2, KNIGHT2, CHESS_ROW1);
-        wKnight2.setOnMouseClicked(this::togglePiece);
-        ChessPiece wRook1 = new Rook("white");
-        add(wRook1, ROOK1, CHESS_ROW1);
-        wRook1.setOnMouseClicked(this::togglePiece);
-        ChessPiece wRook2 = new Rook("white");
-        add(wRook2, ROOK2, CHESS_ROW1);
-        wRook2.setOnMouseClicked(this::togglePiece);
-        for (int i = 0; i < ChessGame.WIDTH; i++) {
-            wPawnArray[i] = new Pawn("white");
-            add(wPawnArray[i], i, CHESS_ROW2);
-            wPawnArray[i].setOnMouseClicked(this::togglePiece);
-        }
+    public void setWhitePieces() {        
+        makePiece("King", "white", KING, CHESS_ROW1);
+        makePiece("Queen", "white", QUEEN, CHESS_ROW1);
+        makePiece("Bishop", "white", BISHOP1, CHESS_ROW1);
+        makePiece("Bishop", "white", BISHOP2, CHESS_ROW1);
+        makePiece("Knight", "white", KNIGHT1, CHESS_ROW1);
+        makePiece("Knight", "white", KNIGHT2, CHESS_ROW1);
+        makePiece("Rook", "white", ROOK1, CHESS_ROW1);
+        makePiece("Rook", "white", ROOK2, CHESS_ROW1);
+        makePawns("white");
         
         //GridPane.setHalignment(wKing, HPos.CENTER);
         //whitePiecesArray[0] = wKing;
@@ -243,34 +364,74 @@ public class Board extends GridPane implements Move {
      * Creates and sets Black Pieces.
      */
     public void setBlackPieces() {
-        ChessPiece bKing = new King("black");
-        add(bKing, KING, CHESS_ROW8);
-        bKing.setOnMouseClicked(this::togglePiece);
-        ChessPiece bQueen = new Queen("black");
-        add(bQueen, QUEEN, CHESS_ROW8);
-        bQueen.setOnMouseClicked(this::togglePiece);
-        ChessPiece bBishop1 = new Bishop("black");
-        add(bBishop1, BISHOP1, CHESS_ROW8);
-        bBishop1.setOnMouseClicked(this::togglePiece);
-        ChessPiece bBishop2 = new Bishop("black");
-        add(bBishop2, BISHOP2, CHESS_ROW8);
-        bBishop2.setOnMouseClicked(this::togglePiece);
-        ChessPiece bKnight1 = new Knight("black");
-        add(bKnight1, KNIGHT1, CHESS_ROW8);
-        bKnight1.setOnMouseClicked(this::togglePiece);
-        ChessPiece bKnight2 = new Knight("black");
-        add(bKnight2, KNIGHT2, CHESS_ROW8);
-        bKnight2.setOnMouseClicked(this::togglePiece);
-        ChessPiece bRook1 = new Rook("black");
-        add(bRook1, ROOK1, CHESS_ROW8);
-        bRook1.setOnMouseClicked(this::togglePiece);
-        ChessPiece bRook2 = new Rook("black");
-        add(bRook2, ROOK2, CHESS_ROW8);
-        bRook2.setOnMouseClicked(this::togglePiece);
-        for (int i = 0; i < ChessGame.WIDTH; i++) {
-            bPawnArray[i] = new Pawn("black");
-            add(bPawnArray[i], i, CHESS_ROW7);
-            bPawnArray[i].setOnMouseClicked(this::togglePiece);
+        makePiece("King", "black", KING, CHESS_ROW8);
+        makePiece("Queen", "black", QUEEN, CHESS_ROW8);
+        makePiece("Bishop", "black", BISHOP1, CHESS_ROW8);
+        makePiece("Bishop", "black", BISHOP2, CHESS_ROW8);
+        makePiece("Knight", "black", KNIGHT1, CHESS_ROW8);
+        makePiece("Knight", "black", KNIGHT2, CHESS_ROW8);
+        makePiece("Rook", "black", ROOK1, CHESS_ROW8);
+        makePiece("Rook", "black", ROOK2, CHESS_ROW8);
+        makePawns("black");
+    }
+    
+    /**
+     * Creates the pieces on the board.
+     * @param name a String
+     * @param colour a String
+     * @param type an int to determine col position.
+     * @param row an int
+     */
+    public void makePiece(String name, String colour, int type, int row) {
+        
+        switch (name) {
+        case "King" :
+            squareArray[type][row].setPiece(new King(colour, type, row));
+            break;
+        case "Queen" :
+            squareArray[type][row].setPiece(new Queen(colour, type, row));
+            break;
+        case "Bishop" :
+            squareArray[type][row].setPiece(new Bishop(colour, type, row));
+            break;
+        case "Knight" :
+            squareArray[type][row].setPiece(new Knight(colour, type, row));
+            break;
+        case "Rook" :
+            squareArray[type][row].setPiece(new Rook(colour, type, row));
+            break;
+        case "Pawn" :
+            squareArray[type][row].setPiece(new Pawn(colour, type, row));
+            break;
+        default :
+            break;
+        }
+        add(squareArray[type][row].getPiece(), type, row);
+        squareArray[type][row].getPiece().setOnMouseClicked(this::togglePiece);
+    }
+    
+    /**
+     * Makes pawn pieces.
+     * @param colour a String.
+     */
+    public void makePawns(String colour) {
+        if (colour.equals("white")) {
+            for (int i = 0; i < WIDTH; i++) {
+                wPawnArray[i] = new Pawn("white", i, CHESS_ROW2);
+                add(wPawnArray[i], wPawnArray[i].getxCor(),
+                        wPawnArray[i].getyCor());
+                squareArray[i][CHESS_ROW2].setPiece(wPawnArray[i]);
+                wPawnArray[i].setOnMouseClicked(this::togglePiece);
+            }
+        } else {
+            for (int i = 0; i < WIDTH; i++) {
+                bPawnArray[i] = new Pawn("black", i, CHESS_ROW7);
+                add(bPawnArray[i], bPawnArray[i].getxCor(),
+                        bPawnArray[i].getyCor());
+                squareArray[i][CHESS_ROW7].setPiece(bPawnArray[i]);
+                bPawnArray[i].setOnMouseClicked(this::togglePiece);
+            }
         }
     }
+
 }

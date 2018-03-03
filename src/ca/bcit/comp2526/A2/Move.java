@@ -13,8 +13,9 @@ public interface Move {
     /**
      * Moves piece.
      * @param e Mouse event
+     * @return a boolean
      */
-    void move(MouseEvent e);
+    boolean move(MouseEvent e);
     
     /**
      * Toggles selected piece.
