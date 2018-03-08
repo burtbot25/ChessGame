@@ -1,6 +1,7 @@
 package ca.bcit.comp2526.A2;
 import java.io.Serializable;
-import javafx.scene.control.Button;
+
+import javafx.geometry.HPos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -153,31 +154,8 @@ public class Board extends GridPane implements Move, Serializable {
      * Constructs an object of type Board.
      */
     public Board() {
-//        printBoard();
     }
-    
-//    /**
-//     * Prints the board.
-//     */
-//    public void printBoard() {
-//        for (int i = 0; i < WIDTH; i++) {
-//            for (int j = 0; j < HEIGHT; j++) {
-//                System.out.print(squareArray[j][i].getPiece() + " ");
-//                if (j == WIDTH - 1) {
-//                    System.out.println();
-//                }
-//            }
-//        }
-//    }
-    
-//    /**
-//     * Sets new game button.
-//     */
-//    public void setNewGame() {
-//        Button newGame = new Button("New Game");
-//        add(newGame, 11, 0);
-//        newGame.setOnMousePressed(this::newGameHandler);
-//    }
+
     
     /**
      * Sets up a new board.
@@ -187,17 +165,7 @@ public class Board extends GridPane implements Move, Serializable {
         setSquares();
         setWhitePieces();
         setBlackPieces();
-        //setNewGame();
-        //new ChessGame().setSaveLoad();
-
-    }
-    
-    /**
-     * Sets up a new board.
-     * @param clicked a MouseEvent
-     */
-    private void newGameHandler(MouseEvent clicked) {
-        newGame();
+        System.out.println("Started New Game");
     }
 
     /**
@@ -279,8 +247,7 @@ public class Board extends GridPane implements Move, Serializable {
             turn = "white";
             System.out.println("White's turn");
         }
-        
-//        printBoard();
+
     }
     
     /**
@@ -355,9 +322,6 @@ public class Board extends GridPane implements Move, Serializable {
         makePiece("Rook", "white", ROOK1, CHESS_ROW1);
         makePiece("Rook", "white", ROOK2, CHESS_ROW1);
         makePawns("white");
-        
-        //GridPane.setHalignment(wKing, HPos.CENTER);
-        //whitePiecesArray[0] = wKing;
     }
     
     /**
@@ -406,6 +370,7 @@ public class Board extends GridPane implements Move, Serializable {
         default :
             break;
         }
+        GridPane.setHalignment(squareArray[type][row].getPiece(), HPos.CENTER);
         add(squareArray[type][row].getPiece(), type, row);
         squareArray[type][row].getPiece().setOnMouseClicked(this::togglePiece);
     }
@@ -422,6 +387,7 @@ public class Board extends GridPane implements Move, Serializable {
                         wPawnArray[i].getyCor());
                 squareArray[i][CHESS_ROW2].setPiece(wPawnArray[i]);
                 wPawnArray[i].setOnMouseClicked(this::togglePiece);
+                GridPane.setHalignment(wPawnArray[i], HPos.CENTER);
             }
         } else {
             for (int i = 0; i < WIDTH; i++) {
@@ -430,6 +396,7 @@ public class Board extends GridPane implements Move, Serializable {
                         bPawnArray[i].getyCor());
                 squareArray[i][CHESS_ROW7].setPiece(bPawnArray[i]);
                 bPawnArray[i].setOnMouseClicked(this::togglePiece);
+                GridPane.setHalignment(bPawnArray[i], HPos.CENTER);
             }
         }
     }

@@ -64,6 +64,9 @@ abstract class ChessPiece extends Text implements Serializable {
      */
     private int yCor;
     
+    /**
+     * Name of chesspiece.
+     */
     private String name;
     
     /**

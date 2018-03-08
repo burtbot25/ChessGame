@@ -14,6 +14,11 @@ import javafx.scene.shape.Rectangle;
 public class Square extends Rectangle {
 
     /**
+     * Square size.
+     */
+    public static final int SQUARE_SIZE = 75;
+    
+    /**
      * Color toggle.
      */
     private boolean toggle;
@@ -50,8 +55,8 @@ public class Square extends Rectangle {
         this.xCor = x;
         this.yCor = y;
         
-        setWidth(ChessGame.SQUARE_SIZE);
-        setHeight(ChessGame.SQUARE_SIZE);
+        setWidth(SQUARE_SIZE);
+        setHeight(SQUARE_SIZE);
         
         setColour();
         

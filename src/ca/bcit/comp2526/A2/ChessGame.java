@@ -26,11 +26,6 @@ import javafx.stage.Stage;
  * @version 2018
  */
 public class ChessGame extends Application {
-
-    /**
-     * Size of square.
-     */
-    public static final int SQUARE_SIZE = 75;
     
     /**
      * Board width.
@@ -48,9 +43,14 @@ public class ChessGame extends Application {
     public static final int OFFSET = 25;
     
     /**
+     * Dimensions.
+     */
+    public static final int DIMENSIONS = 8;
+    
+    /**
      * Chessboard.
      */
-    public static Board chessboard;
+    protected Board chessboard;
     
     /**
      * File.
@@ -158,46 +158,26 @@ public class ChessGame extends Application {
         } catch (ClassNotFoundException e) {
             System.out.println("ClassNotFound Exception");
         } catch (NullPointerException e) {
-            System.out.println("Null Pointer Exception");
-            System.out.println(e.getMessage());
+            System.out.println("No File Selected");
         }
         
     }
     
-//    public void setSaveLoad() {
-//        saveBtn = new Button("Save");
-//        chessboard.add(saveBtn, 9, 0);
-//        saveBtn.setOnMousePressed(this::saveFile);
-//        
-//        loadBtn = new Button("Load");
-//        chessboard.add(loadBtn, 10, 0);
-//        loadBtn.setOnMousePressed(this::openFile);
-//        
-////        MenuBar menuBar = new MenuBar();
-////        Menu menu = new Menu("Menu");
-////        MenuItem saveGame = new MenuItem("Save");
-////        MenuItem loadGame = new MenuItem("Load");
-//
-//        
-//        
-//    }
-    
     /**
-     * Saves the file.
+     * Serializes the file.
      * @param click an event
      */
     private void saveFile(ActionEvent click) {
         
         SaveState saveState = new SaveState();
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < WIDTH; j++) {
+        for (int i = 0; i < DIMENSIONS; i++) {
+            for (int j = 0; j < DIMENSIONS; j++) {
                 if (chessboard.squareArray[i][j].getPiece() != null) {
                     saveState.savePiece(
                             chessboard.squareArray[i][j].getPiece());
                 }
             }
         }
-
 
         FileChooser.ExtensionFilter extFilter = 
                 new FileChooser.ExtensionFilter("TXT files (*.txt)",
