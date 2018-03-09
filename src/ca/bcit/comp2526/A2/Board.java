@@ -204,7 +204,7 @@ public class Board extends GridPane implements Move, Serializable {
      */
     public boolean move(MouseEvent click) {
         getDestinationInfo(click);
-        if (isValid(click) && active && turnCheck()) {
+        if (active && turnCheck() && isValid(click)) {
             setDestination();
             return true;
         }
