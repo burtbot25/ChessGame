@@ -147,7 +147,7 @@ public class Board extends GridPane implements Move, Serializable {
     /**
      * Destination piece.
      */
-    private ChessPiece destPiece;
+    private ChessPiece destPiece = new King("", 0, 0);;
 
     
     /**
@@ -189,7 +189,7 @@ public class Board extends GridPane implements Move, Serializable {
      */
     public boolean turnCheck() {
         if (turn.equals(pieceNode.getColour())) {
-            System.out.println("Turn Change");
+
             return true;
         } else {
             System.out.println("Not your turn");

@@ -170,11 +170,15 @@ abstract class ChessPiece extends Text implements Serializable {
     public boolean checkPath(Square[][] squareArray, int dirX, int dirY,
             int srcX, int srcY, int destX, int destY) {
 
-        while (destY != srcY + dirY || destX != srcX + dirX) {
+        while ((destY != srcY + dirY || destX != srcX + dirX)) {
             srcY = srcY + dirY;
             srcX = srcX + dirX;
-
-            if (squareArray[srcX][srcY].getPiece() != null) {
+            try {
+                if (squareArray[srcX][srcY].getPiece() != null) {
+                    return false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Occupied by self.");
                 return false;
             }
         }
